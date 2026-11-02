@@ -1,7 +1,7 @@
 # CS193_Dining_Nutrition_Tracker
 # Purdue Meal Builder
 
-A Java terminal program to explore the Purdue dining menus add food items for a specific meal and calculate the nutritional totals of them.
+A Java terminal program to explore the Purdue dining menus, add food items for a specific meal, and calculate the nutritional totals of them.
 
 ## The Problem
 
