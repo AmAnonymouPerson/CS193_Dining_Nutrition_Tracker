@@ -20,7 +20,7 @@ Purdue students can view dining menus, but calculating the combined nutrition of
 
 ## System Diagram
 
-
+![System diagram](docs/system-diagram.png)
 
 ## Design Documents
 
