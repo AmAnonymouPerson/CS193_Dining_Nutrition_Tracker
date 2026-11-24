@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.time.format.DateTimeParseException;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class Main {
@@ -55,6 +56,7 @@ public class Main {
             boolean oneOpenMeal = false;
             if (location.Meals != null) {
                 for (int i = 0; i < location.Meals.size(); i++) {
+                    //Check for if a meal is null
                     Meals meal = location.Meals.get(i);
                     System.out.println((i + 1) + ": " + meal.Name + " (" + meal.Status + ")");
                     if (meal.Status.equals("Open")) {
@@ -62,24 +64,18 @@ public class Main {
                     }
                 }
             }
+            Meals meal;
             if (!oneOpenMeal) {
                 System.out.println("No Open Meals");
             } else {
                 while (true) {
                     System.out.println("Type a number corresponding to the chosen meal");
                     String userInput = scanner.nextLine();
-                    Meals meal;
                     try {
                         meal = location.Meals.get(Integer.parseInt(userInput) - 1);
                         if (!meal.Status.equals("Open")) {
                             System.out.println("This meal session is closed. Pick another one");
                             continue;
-                        }
-                        System.out.println("Menu: ");
-                        for (Stations station : meal.Stations) {
-                            for (Item item : station.Items) {
-                                System.out.println(item.Name);
-                            }
                         }
                         break;
                     } catch (NumberFormatException e) {
@@ -90,9 +86,46 @@ public class Main {
                         System.out.println("Invalid Index");
                     }
                 }
+                System.out.println("Menu: ");
+                meal.printMenu();
+
+                Item item;
+                while (true) {
+                    System.out.println("Select an item to see the nutrition information of.");
+                    System.out.println("Type the station character followed by item number.");
+                    System.out.println("'EXIT' to close the application and 'print' to print the menu again");
+                    String userInput = scanner.nextLine();
+                    if (userInput.equalsIgnoreCase("exit")) {
+                        break;
+                    } else if (userInput.equalsIgnoreCase("print")) {
+                        meal.printMenu();
+                        continue;
+                    }
+                    try {
+                        int stationNumber = userInput.charAt(0) - 'a';
+                        int itemNumber = Integer.parseInt(userInput.substring(1)) - 1;
+                        item = meal.Stations.get(stationNumber).Items.get(itemNumber);
+                    } catch (NumberFormatException | NullPointerException | IndexOutOfBoundsException e) {
+                        System.out.println("Invalid Input");
+                        continue;
+                    }
+                    try {
+                        item.updateItem(parser, client);
+                        if (item.Nutrition == null) {
+                            System.out.println("No nutrition data.");
+                            continue;
+                        }
+                    } catch (IOException | InterruptedException e) {
+                        System.out.println("IO exception. There was a network issue this time.");
+                        continue;
+                    }
+                    item.printNutritionData();
+                    //Change it so that it breaks only when the user enters exit.
+                }
             }
         } else {
             System.out.println(response.statusCode());
         }
+        scanner.close();
     }
 }
