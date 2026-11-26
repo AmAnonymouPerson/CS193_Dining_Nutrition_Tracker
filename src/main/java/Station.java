@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Stations {
+public class Station {
     String Name;
     ArrayList<Item> Items;
     String IconUrl;

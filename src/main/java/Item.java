@@ -15,7 +15,11 @@ public class Item {
     Boolean IsVegetarian;
     Boolean NutritionReady;
     ArrayList<Allergen> Allergens;
+    boolean isUpdated;
     public void updateItem(Gson parser, HttpClient client) throws IOException, InterruptedException {
+        if (isUpdated) {
+            return;
+        }
         HttpRequest.Builder builder = HttpRequest.newBuilder();
         String link = "https://api.hfs.purdue.edu/menus/v2/items/" + ID;
         builder.uri(URI.create(link));
@@ -26,6 +30,7 @@ public class Item {
             Item item = parser.fromJson(response.body(), Item.class);
             this.Nutrition = item.Nutrition;
             this.Ingredients = item.Ingredients;
+            isUpdated = true;
         } else {
             throw new IOException("Request failed: " + response.statusCode());
         }
@@ -37,5 +42,13 @@ public class Item {
                 System.out.println((i + 1) + ": " + Nutrition.get(i).toString());
             }
         }
+    }
+    public String getServingSize() {
+        for (Nutrient nutrient : Nutrition) {
+            if (nutrient.Name.equalsIgnoreCase("Serving Size")) {
+                return nutrient.LabelValue;
+            }
+        }
+        return null;
     }
 }

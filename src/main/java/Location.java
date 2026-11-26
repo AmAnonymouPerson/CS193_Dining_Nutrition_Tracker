@@ -5,5 +5,5 @@ public class Location {
     String Date;
     Boolean IsPublished;
     String Notes;
-    ArrayList<Meals> Meals;
+    ArrayList<Meal> Meals;
 }
