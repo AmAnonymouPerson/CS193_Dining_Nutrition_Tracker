@@ -8,6 +8,11 @@ public class Nutrient {
     public String toString() {
         return Name + ", " + Value + ", " + LabelValue + ", " + DailyValue + ", " + Ordinal;
     }
+    public Nutrient (String Name) {
+        this.Name = Name;
+        this.Value = 0.0;
+        this.updateLabel();
+    }
     public boolean equals(Object o) {
         if (o instanceof Nutrient n) {
             return n.Name.equalsIgnoreCase(this.Name);

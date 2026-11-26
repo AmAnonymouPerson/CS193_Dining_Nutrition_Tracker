@@ -13,6 +13,9 @@ public class ItemList {
             Item item = itemEntry.item;
             for (int j = 0; j < item.Nutrition.size(); j++) {
                 Nutrient itemNutrient = item.Nutrition.get(j);
+                if (!nutrients.contains(itemNutrient)) {
+                    nutrients.add(new Nutrient(itemNutrient.Name));
+                }
                 for (int k = 0; k < nutrients.size(); k++) {
                     Nutrient listNutrient = nutrients.get(k);
                     if (itemNutrient.equals(listNutrient)) {
@@ -20,14 +23,15 @@ public class ItemList {
                             listNutrient.Value += (itemEntry.servings * itemNutrient.Value);
                             break;
                         }
-                    } else {
-                        nutrients.add(itemNutrient);
                     }
                 }
             }
         }
     }
     public void printList() {
+        if (itemEntries.isEmpty()) {
+            System.out.println("Nothing so far.");
+        }
         for (int i = 0; i < itemEntries.size(); i++) {
             ItemEntry itemEntry = itemEntries.get(i);
             String itemDescriptor = (i + 1) + ": " + itemEntry.item.Name;
@@ -38,10 +42,14 @@ public class ItemList {
         }
     }
     public void printListNutrition() {
+        if (nutrients.isEmpty()) {
+            System.out.println("Nothing so far.");
+        }
         for (int i = 0; i < nutrients.size(); i++) {
             Nutrient nutrient = nutrients.get(i);
             nutrient.updateLabel();
-            System.out.println((i + 1) + ": " + nutrient.Name + " (" + nutrient.LabelValue + ")");
+            System.out.println(nutrient.Name + ": " + String.format("%.2f", nutrient.Value) +
+                    " (" + nutrient.LabelValue + ")");
         }
     }
 

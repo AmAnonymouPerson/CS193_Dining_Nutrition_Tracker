@@ -56,6 +56,8 @@ public class Main {
                             System.out.println("Type 'add' to add an item to your planned meal.");
                             System.out.println("Type 'print' to print the menu.");
                             System.out.println("Type 'exit' to close the application.");
+                            System.out.println("Type 'meal' to see your meal so far.");
+                            System.out.println("Type 'nutrition' to show your meal's nutrition.");
                             //System.out.println("Type 'back' to go back to selecting a meal");
                         }
                         case "print" -> {
@@ -82,9 +84,7 @@ public class Main {
                             try {
                                 item.updateItem(parser, client);
                                 if (item.Nutrition == null) {
-                                    System.out.println("No nutrition data.");
-                                } else {
-                                    item.printNutritionData();
+                                    System.out.println("No nutrition data. It will still be added to your meal.");
                                 }
                             } catch (IOException e) {
                                 System.out.println("IO exception. There was a network issue this time.");
@@ -98,6 +98,16 @@ public class Main {
                                 System.out.println("This item has incomplete serving size information");
                                 itemList.addItem(item, 1, item.getServingSize());
                             }
+                        }
+                        case "nutrition" -> {
+                            itemList.updateCalculations();
+                            itemList.printListNutrition();
+                        }
+                        case "meal" -> {
+                            itemList.printList();
+                        }
+                        default -> {
+                            System.out.println("Unrecognized command");
                         }
                     }
 
