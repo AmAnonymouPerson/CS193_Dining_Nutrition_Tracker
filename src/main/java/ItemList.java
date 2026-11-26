@@ -8,9 +8,13 @@ public class ItemList {
         itemEntries.add(itemEntry);
     }
     public void updateCalculations() {
+        nutrients.clear();
         for (int i = 0; i < itemEntries.size(); i++) {
             ItemEntry itemEntry = itemEntries.get(i);
             Item item = itemEntry.item;
+            if (item.Nutrition == null) {
+                continue;
+            }
             for (int j = 0; j < item.Nutrition.size(); j++) {
                 Nutrient itemNutrient = item.Nutrition.get(j);
                 if (!nutrients.contains(itemNutrient)) {
