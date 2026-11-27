@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpResponse;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -58,6 +59,8 @@ public class Main {
                             System.out.println("Type 'exit' to close the application.");
                             System.out.println("Type 'meal' to see your meal so far.");
                             System.out.println("Type 'nutrition' to show your meal's nutrition.");
+                            System.out.println("Type 'remove' to remove an item from your meal.");
+                            System.out.println("Type 'servings' to change the servings of an item in your meal.");
                             //System.out.println("Type 'back' to go back to selecting a meal");
                         }
                         case "print" -> {
@@ -98,6 +101,19 @@ public class Main {
                                 System.out.println("This item has incomplete serving size information");
                                 itemList.addItem(item, 1, item.getServingSize());
                             }
+                        }
+                        case "remove" -> {
+                            if (itemList.itemEntries.isEmpty()) {
+                                System.out.println("No items added yet.");
+                                continue;
+                            }
+                            int i = selectItemEntryIndex(scanner, itemList);
+                            itemList.itemEntries.remove(i);
+                        }
+                        case "servings" -> {
+                            int i = selectItemEntryIndex(scanner, itemList);
+                            ItemEntry itemEntry = itemList.itemEntries.get(i);
+                            itemEntry.servings = selectServings(scanner, itemEntry.item);
                         }
                         case "nutrition" -> {
                             itemList.updateCalculations();
@@ -199,5 +215,25 @@ public class Main {
                 System.out.println("Enter a number.");
             }
         }
+    }
+    public static int selectItemEntryIndex(Scanner scanner, ItemList itemList) {
+        ArrayList<ItemEntry> itemEntries = itemList.itemEntries;
+        while (true) {
+            itemList.printList();
+            System.out.println("Type a number corresponding to the item you want to remove");
+            String userInput = scanner.nextLine();
+            try {
+                int i = Integer.parseInt(userInput);
+                ItemEntry itemEntry = itemEntries.get(i - 1);
+                return i;
+            } catch (NumberFormatException e) {
+                System.out.println("Not a number");
+            } catch (NullPointerException f) {
+                System.out.println("Enter a number");
+            } catch (IndexOutOfBoundsException g) {
+                System.out.println("Invalid Index");
+            }
+        }
+
     }
 }
